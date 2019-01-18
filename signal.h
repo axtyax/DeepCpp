@@ -17,10 +17,15 @@ class Signal {
         std::vector<double> values;
         std::function<int(std::vector<int>)> linear_map;
 
+        std::function<int(std::vector<int>)> trivial_map = [](std::vector<int> i) {
+            return i[0];
+        };
+
     public:
 
         Signal() {
             srand (time(NULL));
+            set_map(trivial_map);
         }
 
         Signal (std::vector<double> v) {
@@ -36,7 +41,11 @@ class Signal {
 
         void randomize(double lbound, double ubound) {
             for (std::vector<double>::iterator it = values.begin(); it != values.end(); ++it) {
-                double randval = (rand() % ((int)(ubound - lbound)*1000) + (int)(lbound)*1000) / 1000.0;
+                double randval;
+                if (lbound == ubound)
+                    randval = lbound;
+                else
+                    randval = (rand() % ((int)(ubound - lbound)*1000) + (int)(lbound)*1000) / 1000.0;
                 //std::cout << randval << std::endl;
                 *it = randval;
             }
@@ -49,8 +58,19 @@ class Signal {
             }
         }
 
+        void add_value(double v) {
+            values.push_back(v);
+        }
+
         void set_map(std::function<int(std::vector<int>)> m) {
             linear_map = m;
+        }
+
+        void set_size(std::vector<int> max_dimensions) {
+            int size = 1;
+            for (std::vector<int>::iterator it = max_dimensions.begin(); it != max_dimensions.end(); ++it)
+                size *= *it;
+            values.reserve(size);
         }
 
         int get_size() {
@@ -72,6 +92,10 @@ class Signal {
         double& operator[] (int index) {
             return values[index];
         }
+
+        class iterator = std::vector<double>::iterator;
+        iterator begin() { return values.begin(); }
+        iterator end() { return values.end(); }
 
 };
 

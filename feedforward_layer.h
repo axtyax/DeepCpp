@@ -60,6 +60,8 @@ class FeedForwardLayer : public Layer {
             return output;
         }
 
+        
+
 };
 
 }

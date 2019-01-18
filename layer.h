@@ -15,7 +15,15 @@ class Layer {
 
     public:
 
+        Signal& get_output() {
+            return output;
+        }
+
         virtual Signal& process(Signal&) = 0;
+        void process(Layer* previous_layer) {
+            process(previous_layer->get_output());
+        }
+
         //virtual compute_partials() = 0;
 
 };
