@@ -4,7 +4,8 @@
 #include <vector>
 #include <functional>
 #include <stdlib.h>
-#include <time.h>  
+#include <time.h>
+#include <string>
 
 #include <iostream>
 
@@ -93,12 +94,19 @@ class Signal {
             return values[index];
         }
 
-        class iterator = std::vector<double>::iterator;
+        typedef typename std::vector<double>::iterator iterator;
         iterator begin() { return values.begin(); }
         iterator end() { return values.end(); }
 
 };
 
+}
+
+std::ostream& operator<< (std::ostream &out, dcpp::Signal data) {
+    for (int i = 0; i < data.get_size(); i++) {
+        out << std::to_string(data[i]) + ", ";
+    }
+    return out;
 }
 
 #endif
