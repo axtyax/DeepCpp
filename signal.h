@@ -67,6 +67,10 @@ class Signal {
             linear_map = m;
         }
 
+        std::function<int(std::vector<int>)> get_map() {
+            return linear_map;
+        }
+
         void set_size(std::vector<int> max_dimensions) {
             int size = 1;
             for (std::vector<int>::iterator it = max_dimensions.begin(); it != max_dimensions.end(); ++it)
@@ -82,11 +86,11 @@ class Signal {
             return values[i];
         }
 
-        double get_value(std::vector<int> index) {
+        double& get_value(std::vector<int> index) {
             return values[linear_map(index)];
         }
 
-        double operator[] (std::vector<int> index) {
+        double& operator[] (std::vector<int> index) {
             return get_value(index);
         }
 

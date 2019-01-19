@@ -46,6 +46,14 @@ class Network {
             return error_function->compute_error(last_output,correct);
         }
 
+        void back_propagate(Signal correct) {
+            Signal error_grad = error_function->compute_gradient(last_output,correct);
+            Signal& gradient = layers[layers.size()-1]->back_propagate(error_grad);
+            for (int i = layers.size()-2; i >= 0; i--) {
+                gradient = layers[i]->back_propagate(gradient);
+            }
+        }
+
 };
 
 }

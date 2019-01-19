@@ -16,8 +16,8 @@ class Error {
 
     public:
 
-        virtual double compute_error(Signal&,Signal&);
-        virtual Signal compute_gradient(Signal&,Signal&);
+        virtual double compute_error(Signal&,Signal&) = 0;
+        virtual Signal compute_gradient(Signal&,Signal&) = 0;
 
 };
 

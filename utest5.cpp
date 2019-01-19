@@ -19,5 +19,7 @@ int main() {
     cout << network.process((dcpp::Signal)vector<double>{1,2}) << endl;
     cout << "error: " << network.compute_error(vector<double>{1,1}) << endl;
 
+    network.back_propagate(vector<double>{1,1});
+
     return 0;
 }

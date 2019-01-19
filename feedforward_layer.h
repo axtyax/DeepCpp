@@ -18,6 +18,7 @@ class FeedForwardLayer : public Layer {
     
         int input_size;
         int output_size;
+        int num_weights;
  
         int weight_matrix_map(std::vector<int> i,int insize) {
             return i[1]*insize + i[0];
@@ -33,7 +34,8 @@ class FeedForwardLayer : public Layer {
 
             input_size = insize;
             output_size = outsize;
-            Signal nweights(insize*outsize);
+            num_weights = input_size*output_size;
+            Signal nweights(num_weights);
             nweights.randomize(lwb,lub);
             weights.set_values(nweights);
         }
@@ -43,6 +45,7 @@ class FeedForwardLayer : public Layer {
         }
 
         Signal& process(Signal& input) {
+            last_input.set_values(input);
             Signal output_s(output_size);
             std::function<int(std::vector<int>)> trivial_map = [](std::vector<int> i) {
                 return i[0];
@@ -56,11 +59,29 @@ class FeedForwardLayer : public Layer {
                 }
                 output_s[o] = osum;
             }
-            output = output_s;
-            return output;
+            last_output = output_s;
+            return last_output;
         }
 
-        
+        Signal& back_propagate(Signal& gradient) {
+            partials = Signal(num_weights);
+            partials.set_map(weights.get_map());
+            gradient = Signal(input_size);
+            for (int o = 0; o < gradient.get_size(); o++) {
+                for (int w = 0; w < input_size; w++) {
+                    partials[{w,o}] = gradient[o] * last_input[w];
+                    std::cout << "partial " << partials[{w,o}] << std::endl;
+                }
+            }
+            for (int i = 0; i < input_size; i++) {
+                double grad_sum = 0;
+                for (int o = 0; o < gradient.get_size(); o++) {
+                    grad_sum += gradient[o] * weights[{i,o}];
+                }
+                gradient[i] = grad_sum;
+            }
+            return gradient;
+        }
 
 };
 
