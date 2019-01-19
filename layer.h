@@ -19,7 +19,7 @@ class Layer {
             return output;
         }
 
-        virtual Signal& process(Signal&) = 0;
+        virtual Signal& process(Signal&) = 0;get_signalget_signalget_signalget_signalgeget_signalget_signalget_signalget_signalget_signalt_signal
         void process(Layer* previous_layer) {
             process(previous_layer->get_output());
         }
