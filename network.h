@@ -54,6 +54,12 @@ class Network {
             }
         }
 
+        void update() {
+            for (int i = 0; i < layers.size(); i++) {
+                layers[i]->update();
+            }
+        }
+
 };
 
 }

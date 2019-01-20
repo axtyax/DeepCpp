@@ -8,18 +8,39 @@ using namespace std;
 
 int main() {
 
-    //error function applied to the output of a multilayer network
+    //Training the network to compute XOR
 
     dcpp::Network network;
-    network.add_layer(new dcpp::FeedForwardLayer(3,10,-1,1));
+    network.add_layer(new dcpp::FeedForwardLayer(2,10,-1,1));
     network.add_layer(new dcpp::FeedForwardLayer(10,10,-1,1));
-    network.add_layer(new dcpp::FeedForwardLayer(10,2,-1,1));
+    network.add_layer(new dcpp::FeedForwardLayer(10,1,-1,1));
     network.set_error(new dcpp::MseError());
 
-    cout << network.process((dcpp::Signal)vector<double>{1,2}) << endl;
-    cout << "error: " << network.compute_error(vector<double>{1,1}) << endl;
+    for (int i = 0; i < 1000; i++) {
+        
+        network.process(vector<double>{0,0});
+        network.back_propagate(vector<double>{0});
+        network.update();
+        network.process(vector<double>{0,1});
+        network.back_propagate(vector<double>{1});
+        network.update();
+        network.process(vector<double>{1,0});
+        network.back_propagate(vector<double>{1});
+        network.update();
+        network.process(vector<double>{1,1});
+        network.back_propagate(vector<double>{0});
+        network.update();
 
-    network.back_propagate(vector<double>{1,1});
+        cout << "error: " << network.compute_error(vector<double>{0,0},vector<double>{0}) << endl;
+        cout << "error: " << network.compute_error(vector<double>{0,1},vector<double>{1}) << endl;
+        cout << "error: " << network.compute_error(vector<double>{1,0},vector<double>{1}) << endl;
+        cout << "error: " << network.compute_error(vector<double>{1,1},vector<double>{0}) << endl;
+    }
+
+        cout << network.process(vector<double>{0,0}) << endl;
+        cout << network.process(vector<double>{0,1}) << endl;
+        cout << network.process(vector<double>{1,0}) << endl;
+        cout << network.process(vector<double>{1,1}) << endl;
 
     return 0;
 }

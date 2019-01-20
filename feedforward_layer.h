@@ -63,20 +63,22 @@ class FeedForwardLayer : public Layer {
             return last_output;
         }
 
-        Signal& back_propagate(Signal& gradient) {
+        Signal& back_propagate(Signal& next_gradient) {
+            //cout << "got grad " << next_gradient << "  " << next_gradient[0] << endl;
+            //cout << "SIZES  " << input_size << " " << output_size << endl;
             partials = Signal(num_weights);
             partials.set_map(weights.get_map());
             gradient = Signal(input_size);
-            for (int o = 0; o < gradient.get_size(); o++) {
+            for (int o = 0; o < next_gradient.get_size(); o++) {
                 for (int w = 0; w < input_size; w++) {
-                    partials[{w,o}] = gradient[o] * last_input[w];
-                    std::cout << "partial " << partials[{w,o}] << std::endl;
+                    partials[{w,o}] = next_gradient[o] * last_input[w];
+                    //std::cout << "partial " << partials[{w,o}] << " from " << next_gradient[o] << " " << last_input[w] << std::endl;
                 }
             }
             for (int i = 0; i < input_size; i++) {
                 double grad_sum = 0;
-                for (int o = 0; o < gradient.get_size(); o++) {
-                    grad_sum += gradient[o] * weights[{i,o}];
+                for (int o = 0; o < next_gradient.get_size(); o++) {
+                    grad_sum += next_gradient[o] * weights[{i,o}];
                 }
                 gradient[i] = grad_sum;
             }

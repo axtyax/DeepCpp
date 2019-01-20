@@ -1,5 +1,9 @@
 TODO:
     
+    gradient descaling coefficient
+
+    incorporate biases to train for XOR
+
     Fix errors with back propagation
     
     Test training and confirm results

@@ -82,7 +82,7 @@ class Signal {
             return values.size();
         }
 
-        double get_value(int i) {
+        double& get_value(int i) {
             return values[i];
         }
 

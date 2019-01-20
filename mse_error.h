@@ -14,7 +14,7 @@ class MseError : public Error {
         double compute_error(Signal& output, Signal& correct) {
             double error = 0;
             for (int i = 0; i < output.get_size(); i++) {
-                error += 1/2.0 * pow(output[i]-correct[i],2);
+                error += 1/2.0 * pow(output[i]-correct[i],2) * (1.0/output.get_size());
             }
             return error;
         }
@@ -22,7 +22,7 @@ class MseError : public Error {
         Signal compute_gradient(Signal& output, Signal& correct) {
             Signal gradient;
             for (int i = 0; i < output.get_size(); i++) {
-                gradient.add_value(output[i]-correct[i]);
+                gradient.add_value((output[i]-correct[i])*(1.0/output.get_size()));
             }
             return gradient;
         }
