@@ -47,10 +47,6 @@ class FeedForwardLayer : public Layer {
         Signal& process(Signal& input) {
             last_input.set_values(input);
             Signal output_s(output_size);
-            std::function<int(std::vector<int>)> trivial_map = [](std::vector<int> i) {
-                return i[0];
-            };
-            output_s.set_map(trivial_map);
             for (int o = 0; o < output_s.get_size(); o++) {
                 double osum = 0;
                 for (int i = 0; i < input_size; i++) {

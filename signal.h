@@ -17,6 +17,7 @@ class Signal {
 
         std::vector<double> values;
         std::function<int(std::vector<int>)> linear_map;
+        std::vector<int> max_dimensions;
 
         std::function<int(std::vector<int>)> trivial_map = [](std::vector<int> i) {
             return i[0];
@@ -46,7 +47,7 @@ class Signal {
                 if (lbound == ubound)
                     randval = lbound;
                 else
-                    randval = (rand() % ((int)(ubound - lbound)*1000) + (int)(lbound)*1000) / 1000.0;
+                    randval = (rand() % ((int)((ubound - lbound)*1000)) + (int)((lbound)*1000)) / 1000.0;
                 //std::cout << randval << std::endl;
                 *it = randval;
             }
@@ -72,6 +73,7 @@ class Signal {
         }
 
         void set_size(std::vector<int> max_dimensions) {
+            this->max_dimensions = max_dimensions;
             int size = 1;
             for (std::vector<int>::iterator it = max_dimensions.begin(); it != max_dimensions.end(); ++it)
                 size *= *it;
@@ -80,6 +82,10 @@ class Signal {
 
         int get_size() {
             return values.size();
+        }
+        
+        int get_size(int dim) {
+            return max_dimensions[dim];
         }
 
         double& get_value(int i) {
@@ -96,6 +102,11 @@ class Signal {
 
         double& operator[] (int index) {
             return values[index];
+        }
+
+        void apply_function(double (*f)(double)) {
+            for (int i = 0; i < get_size(); i++)
+                values[i] = f(values[i]);
         }
 
         typedef typename std::vector<double>::iterator iterator;

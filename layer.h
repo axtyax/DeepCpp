@@ -30,7 +30,9 @@ class Layer {
 
         void update() {
             for (int i = 0; i < weights.get_size(); i++) {
-                weights[i] -= partials[i] * 0.001;
+                //cout << "old " << weights[i] << endl;
+                weights[i] -= partials[i] * 0.1;
+                //cout << "new " << weights[i] << endl;
             }
         }
 
